@@ -9,19 +9,8 @@ const urbanist = Urbanist({
   subsets: ["latin"],
   weight: ["800"],
 });
-
-// TypeScript interface for Product
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  slug: string;
-  images: string[];
-  description: string;
-}
-
 async function Products() {
-  const products: Product[] = await client.fetch(groq`*[_type == 'product']{
+  const products = await client.fetch(groq`*[_type == 'product']{
     _id,
     name,
     price,
@@ -34,6 +23,10 @@ async function Products() {
   return (
     <div className="bg-[#F8F8F8] w-full py-12 mt-[125px]">
       <div className="md:max-w-[1024px] max-w-[600px] m-auto md:px-4 px-0">
+
+
+
+
         {/* ********************** Heading div ***************************** */}
         <div className="py-4">
           <h1 className={`${urbanist.className} text-[29px]`}>
@@ -42,13 +35,18 @@ async function Products() {
           <h1 className="text-xl font-medium">Enjoy Up To 50%</h1>
         </div>
 
+
+
+
+
+
+
         {/* ********************** Product Card div ***************************** */}
         <div className="grid md:grid-cols-4 gap-x-1 grid-cols-1 sm:grid-cols-2 mt-6 gap-6">
-          {products.map((product) => (
-            <div
-              key={product._id} // Added key prop
-              className="bg-white pt-10 drop-shadow-md rounded-lg overflow-hidden"
-            >
+
+
+          {products.map((product: any, index: number) => (
+            <div className="bg-white pt-10 drops-shadow-md rounded-lg overflow-hidden">
               <Image
                 src={urlFor(product.images && product.images[0]).url()}
                 alt={product.slug}
@@ -56,19 +54,31 @@ async function Products() {
                 height={100}
                 className="object-cover h-32 mx-auto"
               />
-              <div className="text-center py-10">
-                <h1 className={`${urbanist.className} text-[24px]`}>
-                  {product.name}
-                </h1>
-                <h1
-                  className={`${urbanist.className} text-[20px] text-[#9C9C9C]`}
-                >
-                  ${product.price}
-                </h1>
-              </div>
-            </div>
+          
+
+
+
+          <div className="text-center py-10">
+<h1 className={`${urbanist.className} text-[24px]`} >{product.name}</h1>
+<h1 className={`${urbanist.className} text-[20px] text-[#9C9C9C]`} >${product.price}</h1>
+
+          </div>
+
+
+
+          </div>
           ))}
+
+
         </div>
+
+
+
+
+
+
+
+
       </div>
     </div>
   );
