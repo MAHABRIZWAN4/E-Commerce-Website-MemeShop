@@ -45,29 +45,21 @@ async function Products() {
         <div className="grid md:grid-cols-4 gap-x-1 grid-cols-1 sm:grid-cols-2 mt-6 gap-6">
 
 
-          {products.map((product: any, index: number) => (
-            <div className="bg-white pt-10 drops-shadow-md rounded-lg overflow-hidden">
-              <Image
-                src={urlFor(product.images && product.images[0]).url()}
-                alt={product.slug}
-                width={220}
-                height={100}
-                className="object-cover h-32 mx-auto"
-              />
-          
-
-
-
-          <div className="text-center py-10">
-<h1 className={`${urbanist.className} text-[24px]`} >{product.name}</h1>
-<h1 className={`${urbanist.className} text-[20px] text-[#9C9C9C]`} >${product.price}</h1>
-
-          </div>
-
-
-
-          </div>
-          ))}
+        {products.map((product: { _id: string; name: string; price: number; slug: string; images: string[] }) => (
+  <div key={product._id} className="bg-white pt-10 drops-shadow-md rounded-lg overflow-hidden">
+    <Image
+      src={urlFor(product.images && product.images[0]).url()}
+      alt={product.slug}
+      width={220}
+      height={100}
+      className="object-cover h-32 mx-auto"
+    />
+    <div className="text-center py-10">
+      <h1 className={`${urbanist.className} text-[24px]`}>{product.name}</h1>
+      <h1 className={`${urbanist.className} text-[20px] text-[#9C9C9C]`}>${product.price}</h1>
+    </div>
+  </div>
+))}
 
 
         </div>
