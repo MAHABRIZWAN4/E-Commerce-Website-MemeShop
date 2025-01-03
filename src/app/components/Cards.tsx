@@ -4,12 +4,14 @@ import Image from "next/image";
 import { groq } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
+import Link from "next/link";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
   weight: ["800"],
 });
-async function Products() {
+
+async function Cards() {
   const products = await client.fetch(groq`*[_type == 'product']{
     _id,
     name,
@@ -45,8 +47,12 @@ async function Products() {
         <div className="grid md:grid-cols-4 gap-x-1 grid-cols-1 sm:grid-cols-2 mt-6 gap-6">
 
 
-        {products.map((product: { _id: string; name: string; price: number; slug: string; images: string[] }) => (
-  <div key={product._id} className="bg-white pt-10 drops-shadow-md rounded-lg overflow-hidden">
+        {products.map((product: { _id: string; name: string; price: number; slug: any; images: string[] }) => (
+
+
+<Link href={`/product/${product.slug.current}`}>  
+
+<div key={product._id} className="bg-white pt-10 drops-shadow-md rounded-lg overflow-hidden">
     <Image
       src={urlFor(product.images && product.images[0]).url()}
       alt={product.slug}
@@ -59,6 +65,9 @@ async function Products() {
       <h1 className={`${urbanist.className} text-[20px] text-[#9C9C9C]`}>${product.price}</h1>
     </div>
   </div>
+  
+  
+  </Link>
 ))}
 
 
@@ -76,4 +85,4 @@ async function Products() {
   );
 }
 
-export default Products;
+export default Cards;

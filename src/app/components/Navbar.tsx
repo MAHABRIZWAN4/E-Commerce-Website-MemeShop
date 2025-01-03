@@ -2,6 +2,7 @@ import { FiShoppingBag } from "react-icons/fi";
 
 import { Urbanist } from 'next/font/google';
 import Link from "next/link";
+import Cart from "./Cart";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -26,7 +27,11 @@ const Navbar = () => {
 
 
 </div>
+
+
 </nav>
+
+
   )
 }
 
