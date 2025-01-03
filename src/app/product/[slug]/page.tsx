@@ -1,11 +1,15 @@
 "use client";
-import { client } from '@/sanity/lib/client';
-import { urlFor } from '@/sanity/lib/image';
-import { groq } from 'next-sanity';
-import Image from 'next/image';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
+import { CartContext } from "@/app/context/CardContext";
+import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
+import { groq } from "next-sanity";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+
+
+
 const ProductDetail = () => {
   // State for products and index
   const [products, setProducts] = useState<any[]>([]);
@@ -29,14 +33,21 @@ const ProductDetail = () => {
       setProducts(fetchedProducts);
 
       // Find particular product
-      const product = fetchedProducts.find((product: any) => product.slug.current === slug);
+      const product = fetchedProducts.find(
+        (product: any) => product.slug.current === slug
+      );
       setParticularProduct(product || {});
     };
 
     fetchProducts();
   }, [slug]);
 
-  // Ensure `particularProduct` has loaded before rendering
+
+
+
+  // useState for count increament and decreament
+  const { count , increment , decreament }: any = useContext(CartContext);
+
   return (
     <main className="w-full md:py-16">
       {particularProduct && (
@@ -72,46 +83,34 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          
-          
-          
-          
-          
-          
-          
           {/* Right Box */}
-          <div className='flex flex-col gap-8 md:pt-32 pt-0'>
+          <div className="flex flex-col gap-8 md:pt-32 pt-0">
+            <div className="flex flex-col gap-4">
+              <div className="text-3xl font-bold">{particularProduct.name}</div>
+              <div className="text-xl font-medium">
+                {particularProduct.price}
+              </div>
+            </div>
 
-<div className='flex flex-col gap-4'>
-<div className='text-3xl font-bold'>{particularProduct.name}</div>
-<div className='text-xl font-medium'>{particularProduct.price}
-</div>
-</div>
+            <div className="flex gap-2 items-center">
+              <h3>Quantity</h3>
 
+              <p className=" p-[10px] flex gap-7 border border-black  items-center ">
+                <span className="text-red-600 " onClick={decreament}>
+                  <AiOutlineMinus />
+                </span>
+                <span className="text-[20px]">{count}</span>
+                <span className="text-green-600 "  onClick={increment}>
+                  <AiOutlinePlus />
+                </span>
+              </p>
+            </div>
 
-
-      <div className='flex gap-2 items-center'>
-        <h3>Quantity</h3>
-
-        <p className=' p-[10px] flex gap-7 border border-black  items-center '>
-<span className='text-red-600'><AiOutlineMinus/></span>
-<span className='text-[20px]'>1</span>
-<span className='text-green-600'><AiOutlinePlus/></span>
-
-
-        </p>
-      </div>
-
-
-
-{/* for button */}
-<button className='text-black md:w-1/2 p-5 text-xl font-bold w-full  border-4 border-black  hover:bg-black  hover:text-white'>Add to Cart</button>
-
-
+            {/* for button */}
+            <button className="text-black md:w-1/2 p-5 text-xl font-bold w-full  border-4 border-black  hover:bg-black  hover:text-white">
+              Add to Cart
+            </button>
           </div>
-
-
-
         </div>
       )}
     </main>
