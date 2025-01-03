@@ -47,15 +47,14 @@ async function Cards() {
         <div className="grid md:grid-cols-4 gap-x-1 grid-cols-1 sm:grid-cols-2 mt-6 gap-6">
 
 
-        {products.map((product: { _id: string; name: string; price: number; slug: any; images: string[] }) => (
+        {products.map((product: { _id: string; name: string; price: number; slug: { current: string }; images: string[] }) => (
+  <Link key={product._id} href={`/product/${product.slug.current}`}>
 
-
-<Link href={`/product/${product.slug.current}`}>  
 
 <div key={product._id} className="bg-white pt-10 drops-shadow-md rounded-lg overflow-hidden">
     <Image
       src={urlFor(product.images && product.images[0]).url()}
-      alt={product.slug}
+      alt={product.slug.current}
       width={220}
       height={100}
       className="object-cover h-32 mx-auto"

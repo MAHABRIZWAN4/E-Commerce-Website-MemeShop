@@ -8,45 +8,52 @@ import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
-
+// Product type definition
+type Product = {
+  _id: string;
+  name: string;
+  price: number;
+  slug: { current: string };
+  images: string[];
+  description: string;
+};
 
 const ProductDetail = () => {
-  // State for products and index
-  const [products, setProducts] = useState<any[]>([]);
-  const [particularProduct, setParticularProduct] = useState<any>(null);
+  // State for the particular product and index
+  const [particularProduct, setParticularProduct] = useState<Product | null>(null);
   const [index, setIndex] = useState(0);
 
   // Get slug from params
-  const { slug }: any = useParams();
+  const { slug } = useParams<{ slug: string }>();
 
   // Fetch data on component mount
   useEffect(() => {
     const fetchProducts = async () => {
-      const fetchedProducts = await client.fetch(groq`*[_type == 'product']{
-        _id,
-        name,
-        price,
-        slug,
-        images,
-        description
-      }`);
-      setProducts(fetchedProducts);
+      const fetchedProducts: Product[] = await client.fetch(
+        groq`*[_type == 'product']{
+          _id,
+          name,
+          price,
+          slug,
+          images,
+          description
+        }`
+      );
 
       // Find particular product
-      const product = fetchedProducts.find(
-        (product: any) => product.slug.current === slug
-      );
-      setParticularProduct(product || {});
+      const product = fetchedProducts.find((product) => product.slug.current === slug);
+      setParticularProduct(product || null);
     };
 
     fetchProducts();
   }, [slug]);
 
-
-
-
-  // useState for count increament and decreament
-  const { count , increment , decreament }: any = useContext(CartContext);
+  // useState for count increment and decrement
+  const { count, increment, decreament } = useContext(CartContext) as {
+    count: number;
+    increment: () => void;
+    decreament: () => void;
+  };
 
   return (
     <main className="w-full md:py-16">
@@ -55,11 +62,11 @@ const ProductDetail = () => {
           {/* Left Box */}
           <div>
             {/* Top Image */}
-            <div className="h-[450px] flex items-center mb-[25px] ">
+            <div className="h-[450px] flex items-center mb-[25px]">
               <Image
                 loader={() => urlFor(particularProduct.images[index]).url()}
                 src={urlFor(particularProduct.images[index]).url()}
-                alt={particularProduct.images[index]}
+                alt={`Product Image ${index + 1}`}
                 width={350}
                 height={350}
                 className="object-cover mx-auto"
@@ -67,13 +74,13 @@ const ProductDetail = () => {
             </div>
 
             {/* Bottom Images */}
-            <div className="flex gap-[5px] justify-center ">
-              {particularProduct.images?.map((item: any, i: number) => (
+            <div className="flex gap-[5px] justify-center">
+              {particularProduct.images?.map((item, i) => (
                 <Image
                   key={i}
-                  loader={() => urlFor(particularProduct.images[i]).url()}
-                  src={urlFor(particularProduct.images[i]).url()}
-                  alt={particularProduct.images[i]}
+                  loader={() => urlFor(item).url()}
+                  src={urlFor(item).url()}
+                  alt={`Thumbnail ${i + 1}`}
                   width={220}
                   height={100}
                   className="object-cover mx-auto border h-32 rounded-xl hover:cursor-pointer"
@@ -87,27 +94,24 @@ const ProductDetail = () => {
           <div className="flex flex-col gap-8 md:pt-32 pt-0">
             <div className="flex flex-col gap-4">
               <div className="text-3xl font-bold">{particularProduct.name}</div>
-              <div className="text-xl font-medium">
-                {particularProduct.price}
-              </div>
+              <div className="text-xl font-medium">{particularProduct.price}</div>
             </div>
 
             <div className="flex gap-2 items-center">
               <h3>Quantity</h3>
-
-              <p className=" p-[10px] flex gap-7 border border-black  items-center ">
-                <span className="text-red-600 " onClick={decreament}>
+              <p className="p-[10px] flex gap-7 border border-black items-center">
+                <span className="text-red-600" onClick={decreament}>
                   <AiOutlineMinus />
                 </span>
                 <span className="text-[20px]">{count}</span>
-                <span className="text-green-600 "  onClick={increment}>
+                <span className="text-green-600" onClick={increment}>
                   <AiOutlinePlus />
                 </span>
               </p>
             </div>
 
-            {/* for button */}
-            <button className="text-black md:w-1/2 p-5 text-xl font-bold w-full  border-4 border-black  hover:bg-black  hover:text-white">
+            {/* Add to Cart Button */}
+            <button className="text-black md:w-1/2 p-5 text-xl font-bold w-full border-4 border-black hover:bg-black hover:text-white">
               Add to Cart
             </button>
           </div>

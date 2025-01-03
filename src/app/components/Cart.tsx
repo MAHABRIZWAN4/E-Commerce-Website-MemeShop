@@ -8,8 +8,8 @@ const Cart = () => {
 
 
 
-  const {showCart, setshowCart}:any = useContext(CartContext);
-  
+  const { showCart, setshowCart } = useContext(CartContext) as { showCart: boolean; setshowCart: (value: boolean) => void };
+
 
 
 

@@ -8,7 +8,8 @@ export const CartContext = createContext({})   // create context apne under ek i
 
 
 // CartProvider ek component he jo ki children props leta he
-export const CartProvider = ({children}:any) => {
+export const CartProvider = ({ children }: { children: React.ReactNode }) => {
+
 
 const [showCart, setshowCart]  = useState(false);
 
