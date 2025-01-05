@@ -6,7 +6,7 @@ import Link from "next/link";
 import Cart from "./Cart";
 
 
-import { CartContext } from "../context/CardContext";
+import { CartContext } from "../context/CartContext";
 import { useContext } from "react";
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -19,7 +19,7 @@ const Navbar = () => {
 
 
 
-  const { showCart, setshowCart } = useContext(CartContext) as { showCart: boolean; setshowCart: (value: boolean) => void };
+  const { showCart, setshowCart , TotalQuantity } = useContext(CartContext) as { showCart: boolean; setshowCart: (value: boolean) => void ; TotalQuantity:number };
 
   
 
@@ -48,7 +48,7 @@ const Navbar = () => {
 <button className="relative text-[25px]" onClick={handleClick}>
     <FiShoppingBag />
 
-    <span className="absolute text-[12px] top-0 right-[-5px] bg-red-500 w-[18px] h-[18px] rounded-3xl  text-center text-white font-bold">0</span>
+    <span className="absolute text-[12px] top-0 right-[-5px] bg-red-500 w-[18px] h-[18px] rounded-3xl  text-center text-white font-bold">{TotalQuantity}</span>
     </button>
 
 

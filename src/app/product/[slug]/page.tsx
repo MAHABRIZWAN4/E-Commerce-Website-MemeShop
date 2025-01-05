@@ -1,5 +1,5 @@
 "use client";
-import { CartContext } from "@/app/context/CardContext";
+import { CartContext } from "@/app/context/CartContext";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { groq } from "next-sanity";
@@ -49,14 +49,18 @@ const ProductDetail = () => {
   }, [slug]);
 
   // useState for count increment and decrement
-  const { count, increment, decreament } = useContext(CartContext) as {
+  const { count, increment, decreament , addProducts , cartItems } = useContext(CartContext) as {
     count: number;
     increment: () => void;
     decreament: () => void;
+    addProducts: (particularProduct: any, quantity: number) => void;
+    cartItems: number[];
   };
 
+
+  
   return (
-    <main className="w-full md:py-16">
+    <main className="w-full md:py-16 max-w-[7xl] mx-auto">
       {particularProduct && (
         <div className="gap-8 md:max-w-[1024px] m-auto max-w-[600px] px-4 md:px-0 grid md:grid-cols-2 grid-cols-1">
           {/* Left Box */}
@@ -74,7 +78,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Bottom Images */}
-            <div className="flex gap-[5px] justify-center">
+            <div className="flex gap-[5px] justify-center flex-col sm:flex-row md:ml-72 lg:ml-0">
               {particularProduct.images?.map((item, i) => (
                 <Image
                   key={i}
@@ -83,7 +87,7 @@ const ProductDetail = () => {
                   alt={`Thumbnail ${i + 1}`}
                   width={220}
                   height={100}
-                  className="object-cover mx-auto border h-32 rounded-xl hover:cursor-pointer"
+                  className="object-cover  mx-auto border h-32 rounded-xl hover:cursor-pointer"
                   onClick={() => setIndex(i)}
                 />
               ))}
@@ -94,24 +98,27 @@ const ProductDetail = () => {
           <div className="flex flex-col gap-8 md:pt-32 pt-0">
             <div className="flex flex-col gap-4">
               <div className="text-3xl font-bold">{particularProduct.name}</div>
-              <div className="text-xl font-medium">{particularProduct.price}</div>
+              <div className="text-xl font-medium">${particularProduct.price}</div>
             </div>
 
             <div className="flex gap-2 items-center">
               <h3>Quantity</h3>
               <p className="p-[10px] flex gap-7 border border-black items-center">
-                <span className="text-red-600" onClick={decreament}>
+                <span className="text-red-600  cursor-pointer" onClick={decreament}>
                   <AiOutlineMinus />
                 </span>
                 <span className="text-[20px]">{count}</span>
-                <span className="text-green-600" onClick={increment}>
+                <span className="text-green-600 cursor-pointer" onClick={increment}>
                   <AiOutlinePlus />
                 </span>
               </p>
             </div>
 
+            
+            
             {/* Add to Cart Button */}
-            <button className="text-black md:w-1/2 p-5 text-xl font-bold w-full border-4 border-black hover:bg-black hover:text-white">
+            <button className="text-black md:w-1/2 p-5 text-xl font-bold w-full border-4 border-black hover:bg-black hover:text-white" 
+            onClick={() => addProducts(particularProduct, count)}>
               Add to Cart
             </button>
           </div>
