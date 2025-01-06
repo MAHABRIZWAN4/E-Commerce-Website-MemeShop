@@ -7,6 +7,11 @@ import { urlFor } from "@/sanity/lib/image";
 import { TiDeleteOutline } from "react-icons/ti";
 
 const Cart = () => {
+
+
+
+
+  
   const {
     showCart,
     setshowCart,
