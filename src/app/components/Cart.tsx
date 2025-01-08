@@ -5,6 +5,8 @@ import { CartContext } from "../context/CartContext";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { TiDeleteOutline } from "react-icons/ti";
+import { json } from "stream/consumers";
+import { domainToASCII } from "url";
 
 const Cart = () => {
 
@@ -33,6 +35,32 @@ const Cart = () => {
   const handleClose = () => {
     setshowCart(!showCart);
   };
+
+
+
+  // handledCheckOut function bana rahe hein Pay to Stripe button per functunality add kerne ke liye..
+
+  async function handledCheckOut(){
+   
+    try {
+      const response  = await fetch('http://localhost:3000/api/check-out' , {
+        method:"POST",
+        headers:{"Content-Type" : "application/json"},
+        body:JSON.stringify({products:cartItems})
+      });
+
+      const data = await response.json();
+
+      if(data.url){
+        window.location.href = data.url
+
+      }
+    } catch (error) {
+      console.log("Error During CheckOut" , error);
+      
+    }
+
+    }
 
   return (
     <div className="w-full h-full fixed right-0 top-0 z-10 bg-black bg-opacity-50">
@@ -118,7 +146,7 @@ const Cart = () => {
             <button
               type="button"
               className="text-black p-5 text-xl font-bold w-full border-4 border-black hover:text-white hover:bg-black"
-            >
+             onClick={handledCheckOut}>
               Pay With Stripe
             </button>
           </div>
