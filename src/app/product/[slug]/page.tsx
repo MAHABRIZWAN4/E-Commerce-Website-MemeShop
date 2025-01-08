@@ -49,13 +49,13 @@ const ProductDetail = () => {
   }, [slug]);
 
   // useState for count increment and decrement
-  const { count, increment, decreament , addProducts , cartItems } = useContext(CartContext) as {
+  const { count, increment, decreament, addProducts } = useContext(CartContext) as {
     count: number;
     increment: () => void;
     decreament: () => void;
     addProducts: (particularProduct: any, quantity: number) => void;
-    cartItems: number[];
   };
+  
 
 
   

@@ -5,8 +5,7 @@ import { CartContext } from "../context/CartContext";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { TiDeleteOutline } from "react-icons/ti";
-import { json } from "stream/consumers";
-import { domainToASCII } from "url";
+
 
 const Cart = () => {
 
