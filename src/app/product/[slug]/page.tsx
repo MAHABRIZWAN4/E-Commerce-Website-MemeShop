@@ -54,6 +54,7 @@ const ProductDetail = () => {
     increment: () => void;
     decreament: () => void;
     addProducts: (particularProduct: any, quantity: number) => void;
+
   };
   
 
