@@ -6,13 +6,16 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { TiDeleteOutline } from "react-icons/ti";
 
+// Define the Product type
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  images: string[];
+  quantity: number;
+}
 
 const Cart = () => {
-
-
-
-
-  
   const {
     showCart,
     setshowCart,
@@ -24,42 +27,35 @@ const Cart = () => {
   } = useContext(CartContext) as {
     showCart: boolean;
     setshowCart: (value: boolean) => void;
-    cartItems: number[];
+    cartItems: Product[];
     TotalQuantity: number;
     TotalPrice: number;
-    toggleCartItemQty: (id: any, value: any) => void;
-    onRemove: (product: any) => void;
+    toggleCartItemQty: (id: string, value: "plus" | "minus") => void;
+    onRemove: (product: Product) => void;
   };
 
   const handleClose = () => {
     setshowCart(!showCart);
   };
 
-
-
-  // handledCheckOut function bana rahe hein Pay to Stripe button per functunality add kerne ke liye..
-
-  async function handledCheckOut(){
-   
+  // handledCheckOut function for Pay to Stripe functionality
+  async function handledCheckOut() {
     try {
-      const response  = await fetch('http://localhost:3000/api/check-out' , {
-        method:"POST",
-        headers:{"Content-Type" : "application/json"},
-        body:JSON.stringify({products:cartItems})
+      const response = await fetch("http://localhost:3000/api/check-out", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ products: cartItems }),
       });
 
       const data = await response.json();
 
-      if(data.url){
-        window.location.href = data.url
-
+      if (data.url) {
+        window.location.href = data.url;
       }
     } catch (error) {
-      console.log("Error During CheckOut" , error);
-      
+      console.log("Error During CheckOut", error);
     }
-
-    }
+  }
 
   return (
     <div className="w-full h-full fixed right-0 top-0 z-10 bg-black bg-opacity-50">
@@ -79,7 +75,7 @@ const Cart = () => {
 
         {/* Scrollable cart items */}
         <div className="flex-1 overflow-auto px-[20px] py-[10px]">
-          {cartItems.map((particularProduct: any) => (
+          {cartItems.map((particularProduct: Product) => (
             <div
               className="flex flex-col sm:flex-row sm:gap-[15px] gap-0 p-0 sm:p-[20px]"
               key={particularProduct._id}
@@ -87,7 +83,7 @@ const Cart = () => {
               <Image
                 loader={() => urlFor(particularProduct.images[0]).url()}
                 src={urlFor(particularProduct.images[0]).url()}
-                alt={`Product Image ${0 + 1}`}
+                alt={`Product Image`}
                 width={200}
                 height={200}
                 className="object-cover w-[100px] h-[100px] sm:w-[200px] sm:h-[200px]"
@@ -145,7 +141,8 @@ const Cart = () => {
             <button
               type="button"
               className="text-black p-5 text-xl font-bold w-full border-4 border-black hover:text-white hover:bg-black"
-             onClick={handledCheckOut}>
+              onClick={handledCheckOut}
+            >
               Pay With Stripe
             </button>
           </div>
