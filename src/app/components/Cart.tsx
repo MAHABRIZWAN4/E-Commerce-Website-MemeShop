@@ -41,7 +41,7 @@ const Cart = () => {
   // handledCheckOut function for Pay to Stripe functionality
   async function handledCheckOut() {
     try {
-      const response = await fetch("http://localhost:3000/api/check-out", {
+      const response = await fetch("/api/check-out", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ products: cartItems }),
